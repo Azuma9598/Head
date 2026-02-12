@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minecraft Addon Repair Studio · 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Floating glass particles (CSS generated) -->
+  <div class="particles"></div>
+  
+  <main class="glass-dome">
+    <div class="orb"></div>
+    
+    <section class="hero">
+      <h1 class="neon-title">
+        <span class="gradient-text">ADDON</span>
+        <span class="thin">FIX</span>
+        <span class="accent">⚡</span>
+      </h1>
+      <p class="subtitle">Remove head tracking · Repair JSON · Fix manifests</p>
+    </section>
+
+    <section class="upload-arena">
+      <div class="upload-card" id="dropZone">
+        <div class="upload-icon">
+          <svg viewBox="0 0 24 24" width="64" height="64">
+            <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
+          </svg>
+        </div>
+        <h2>Drop .zip / .mcaddon / .mcpack</h2>
+        <p class="file-hint">or click to browse</p>
+        <input type="file" id="fileInput" accept=".zip,.mcaddon,.mcpack" hidden>
+        <button class="glass-button" id="selectFileBtn">Select File</button>
+      </div>
+
+      <div class="progress-container" id="progressContainer" hidden>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p class="progress-status" id="progressStatus">Preparing...</p>
+      </div>
+    </section>
+
+    <footer class="glass-footer">
+      <span>© 2026 · Addon Repair Engine · v2.0</span>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
