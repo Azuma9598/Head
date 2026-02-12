@@ -57,6 +57,100 @@ function removeHeadSmooth(obj) {
 }
 
 /**
+ * Remove geometry.*.smooth references — replace with non-smooth equivalent.
+ * e.g. "geometry.starstore.skin.head.smooth" → "geometry.starstore.skin.head"
+ * @param {object} obj - Any parsed JSON object
+ */
+function removeGeometrySmooth(obj) {
+  if (typeof obj !== 'object' || obj === null) return;
+
+  for (const key in obj) {
+    const value = obj[key];
+
+    if (typeof value === 'string' && value.includes('geometry.') && value.includes('smooth')) {
+      obj[key] = value.replace(/\.smooth/gi, '');
+      logger.info(`Replaced smooth geometry: ${value} → ${obj[key]}`);
+    } else if (typeof value === 'object') {
+      removeGeometrySmooth(value);
+    }
+  }
+}
+
+/**
+ * Remove smoothHeadX/Y/Z variables from scripts.initialize and scripts.pre_animation,
+ * remove "head.smooth" entries from scripts.animate,
+ * and remove "head.smooth" keys from the animations object.
+ * @param {object} json - Any parsed JSON object
+ */
+function removeSmoothHeadScripts(json) {
+  if (typeof json !== 'object' || json === null) return;
+
+  const SMOOTH_VAR_PATTERNS = [
+    'smoothhead', 'smooth_head', 'v.smoothhead', 'v.smooth_head',
+    'targetsmoothhead', 'smoothdelta'
+  ];
+  const SMOOTH_ANIM_PATTERNS = [
+    'head.smooth', 'smooth_head', 'smooth_rotation'
+  ];
+
+  for (const key in json) {
+    const value = json[key];
+
+    // Clean scripts.initialize — same as pre_animation
+    if (key === 'initialize' && Array.isArray(value)) {
+      const before = value.length;
+      json[key] = value.filter(expr => {
+        if (typeof expr !== 'string') return true;
+        const lower = expr.toLowerCase();
+        const shouldRemove = SMOOTH_VAR_PATTERNS.some(p => lower.includes(p));
+        if (shouldRemove) logger.info(`Removed smooth head initialize script: ${expr}`);
+        return !shouldRemove;
+      });
+      if (json[key].length === 0 && before > 0) delete json[key];
+    }
+
+    // Clean scripts.pre_animation
+    if (key === 'pre_animation' && Array.isArray(value)) {
+      const before = value.length;
+      json[key] = value.filter(expr => {
+        if (typeof expr !== 'string') return true;
+        const lower = expr.toLowerCase();
+        const shouldRemove = SMOOTH_VAR_PATTERNS.some(p => lower.includes(p));
+        if (shouldRemove) logger.info(`Removed smooth head pre_animation script: ${expr}`);
+        return !shouldRemove;
+      });
+      if (json[key].length === 0 && before > 0) delete json[key];
+    }
+
+    // Clean scripts.animate — remove "head.smooth" entries
+    if (key === 'animate' && Array.isArray(value)) {
+      json[key] = value.filter(entry => {
+        const name = typeof entry === 'string' ? entry : Object.keys(entry)[0] || '';
+        const shouldRemove = SMOOTH_ANIM_PATTERNS.some(p => name.toLowerCase().includes(p));
+        if (shouldRemove) logger.info(`Removed smooth animate entry: ${name}`);
+        return !shouldRemove;
+      });
+    }
+
+    // Clean animations object — remove keys like "head.smooth"
+    if (key === 'animations' && typeof value === 'object' && !Array.isArray(value)) {
+      Object.keys(value).forEach(animKey => {
+        const shouldRemove = SMOOTH_ANIM_PATTERNS.some(p => animKey.toLowerCase().includes(p));
+        if (shouldRemove) {
+          logger.info(`Removed smooth animation key: ${animKey}`);
+          delete value[animKey];
+        }
+      });
+    }
+
+    // Recurse
+    if (typeof value === 'object') {
+      removeSmoothHeadScripts(value);
+    }
+  }
+}
+
+/**
  * Remove unwanted head animations and rotation limits from animation JSON.
  * @param {object} json - Parsed animation file content
  * @returns {object} Modified JSON
@@ -110,7 +204,13 @@ function fixAnimationFile(json) {
   // Pass 2: deep-scan for any leftover query-based head rotation
   removeHeadSmooth(json);
 
+  // Pass 3: replace smooth geometry references
+  removeGeometrySmooth(json);
+
+  // Pass 4: remove smoothHeadX/Y/Z script variables
+  removeSmoothHeadScripts(json);
+
   return json;
 }
 
-module.exports = { fixAnimationFile, removeHeadSmooth };
+module.exports = { fixAnimationFile, removeHeadSmooth, removeGeometrySmooth, removeSmoothHeadScripts };
