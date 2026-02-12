@@ -3,7 +3,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const { parseAndFixJSON } = require('./jsonFixer');
 const { fixManifest } = require('./manifestFixer');
-const { fixAnimationFile } = require('./animationFixer');
+const { fixAnimationFile, removeHeadSmooth } = require('./animationFixer');
 const logger = require('../utils/logger');
 
 /**
@@ -36,8 +36,10 @@ async function fixAddonFiles(dir) {
       } else if (filePath.includes('animations') || filePath.includes('animation_controllers')) {
         json = fixAnimationFile(json);
         logger.info(`Processed animation file: ${relativePath}`);
+      } else {
+        // Deep-scan all other JSON files (render_controllers, entity files, etc.)
+        removeHeadSmooth(json);
       }
-      // Additional fixers can be added here (render_controllers, etc.)
 
       // Step 3: Write back fixed JSON
       await fs.writeFile(filePath, JSON.stringify(json, null, 2), 'utf8');
