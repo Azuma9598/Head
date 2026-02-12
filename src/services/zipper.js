@@ -1,7 +1,6 @@
 // src/services/zipper.js
 const archiver = require('archiver');
 const { PassThrough } = require('stream');
-const { BadRequestError } = require('../utils/errors');
 const logger = require('../utils/logger');
 
 /**
