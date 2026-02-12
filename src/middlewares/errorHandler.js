@@ -6,7 +6,7 @@ module.exports = (err, req, res, next) => {
   let { statusCode = 500, message = 'Something went wrong' } = err;
 
   // Handle multer errors
-  if (err.code === 'FILE_TOO_LARGE') {
+  if (err.code === 'LIMIT_FILE_SIZE') {
     statusCode = 413;
     message = `File too large. Max size: ${process.env.MAX_FILE_SIZE || '100MB'}`;
   } else if (err.name === 'MulterError') {
