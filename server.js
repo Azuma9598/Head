@@ -4,8 +4,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const errorHandler = require('./scr/middlewares/errorHandler');
-const uploadController = require('./scr/controllers/uploadController');
+const errorHandler = require('./src/middlewares/errorHandler');
+const uploadController = require('./src/controllers/uploadController');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
