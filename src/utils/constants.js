@@ -8,7 +8,8 @@ module.exports = {
     'head_follow',
     'smooth_rotation',
     'smooth_head',
-    'look_at_player'
+    'look_at_player',
+    'head.smooth'        // e.g. animation.starstore_skin.head.smooth
   ],
   RENDER_CONTROLLER_PRESERVE: [
     'controller.animation.player.render',
