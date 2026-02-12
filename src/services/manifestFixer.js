@@ -10,6 +10,9 @@ const logger = require('../utils/logger');
 function fixManifest(manifest) {
   if (!manifest.format_version) manifest.format_version = 2;
 
+  // Ensure header exists
+  if (!manifest.header) manifest.header = {};
+
   // Fix header
   if (manifest.header) {
     if (manifest.header.version) {
