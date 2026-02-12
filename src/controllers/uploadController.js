@@ -41,7 +41,8 @@ exports.handleUpload = [
 
       zipStream.on('error', async (err) => {
         await removeDirectory(tempDir);
-        next(err);
+        if (!res.headersSent) next(err);
+        else res.destroy(err);
       });
     } catch (error) {
       if (tempDir) await removeDirectory(tempDir);
