@@ -1,0 +1,331 @@
+/* style.css — SaaS 2026, glassmorphism, neon gradients, floating particles */
+
+:root {
+  --bg-dark: #0a0b0e;
+  --glass-bg: rgba(18, 22, 30, 0.7);
+  --glass-border: rgba(72, 187, 255, 0.2);
+  --neon-cyan: #00f0ff;
+  --neon-purple: #b721ff;
+  --neon-blue: #1e90ff;
+  --text-primary: rgba(255, 255, 255, 0.92);
+  --text-secondary: rgba(200, 220, 255, 0.7);
+  --shadow-neon: 0 0 20px rgba(0, 240, 255, 0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: radial-gradient(circle at 20% 30%, #1a1f2e, #0a0c12);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow-x: hidden;
+  color: var(--text-primary);
+}
+
+/* ========== FLOATING PARTICLES (CSS only) ========== */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.particles::before,
+.particles::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(2px 2px at 10% 20%, rgba(0, 240, 255, 0.4) 100%, transparent),
+    radial-gradient(3px 3px at 85% 40%, rgba(183, 33, 255, 0.3) 100%, transparent),
+    radial-gradient(2px 2px at 30% 70%, rgba(30, 144, 255, 0.5) 100%, transparent),
+    radial-gradient(4px 4px at 60% 90%, rgba(0, 240, 255, 0.2) 100%, transparent),
+    radial-gradient(2px 2px at 45% 15%, #b721ff 100%, transparent),
+    radial-gradient(3px 3px at 75% 55%, #1e90ff 100%, transparent),
+    radial-gradient(2px 2px at 95% 80%, #00f0ff 100%, transparent);
+  background-size: 250% 250%;
+  background-repeat: no-repeat;
+  animation: floatParticles 40s infinite alternate ease-in-out;
+  opacity: 0.5;
+}
+
+.particles::after {
+  background-position: 80% 30%, 10% 90%, 50% 50%, 70% 20%, 20% 60%, 90% 10%, 40% 80%;
+  animation-duration: 60s;
+  opacity: 0.3;
+}
+
+@keyframes floatParticles {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-3%, -2%) scale(1.05); }
+}
+
+/* ========== MAIN GLASS DOME ========== */
+.glass-dome {
+  position: relative;
+  z-index: 10;
+  width: min(800px, 92%);
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 48px;
+  padding: 3rem 2rem;
+  box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.6), var(--shadow-neon);
+  animation: fadeGlow 6s infinite alternate;
+}
+
+@keyframes fadeGlow {
+  0% { box-shadow: 0 25px 50px -8px rgba(0,0,0,0.6), 0 0 20px rgba(0,240,255,0.2); }
+  100% { box-shadow: 0 25px 50px -8px rgba(0,0,0,0.6), 0 0 40px rgba(183,33,255,0.3); }
+}
+
+.orb {
+  position: absolute;
+  top: -50px;
+  right: -30px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle at 30% 30%, var(--neon-cyan), transparent 80%);
+  filter: blur(60px);
+  opacity: 0.4;
+  z-index: -1;
+  animation: orbMove 20s infinite alternate;
+}
+
+@keyframes orbMove {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-20px, 20px) scale(1.2); }
+}
+
+/* ========== TITLE ========== */
+.hero {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.neon-title {
+  font-size: clamp(3rem, 12vw, 5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.2em;
+}
+
+.gradient-text {
+  background: linear-gradient(145deg, var(--neon-cyan), var(--neon-blue), var(--neon-purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: hueRotate 8s infinite linear;
+  filter: drop-shadow(0 0 12px rgba(0,240,255,0.6));
+}
+
+.thin {
+  font-weight: 300;
+  color: white;
+  text-shadow: 0 0 8px rgba(255,255,255,0.4);
+}
+
+.accent {
+  background: linear-gradient(45deg, var(--neon-purple), #ffaa00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 1.2em;
+}
+
+@keyframes hueRotate {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding: 0.5rem 0;
+  display: inline-block;
+  backdrop-filter: blur(4px);
+}
+
+/* ========== UPLOAD CARD ========== */
+.upload-arena {
+  margin: 2rem 0;
+}
+
+.upload-card {
+  background: rgba(255,255,255,0.03);
+  border: 1.5px dashed rgba(0,240,255,0.5);
+  border-radius: 32px;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  transition: all 0.25s cubic-bezier(0.2,0.9,0.4,1);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+
+.upload-card:hover {
+  border-color: var(--neon-purple);
+  background: rgba(183,33,255,0.05);
+  box-shadow: 0 0 30px rgba(183,33,255,0.2);
+  transform: translateY(-2px);
+}
+
+.upload-icon {
+  margin-bottom: 1.5rem;
+}
+
+.upload-icon svg {
+  fill: rgba(255,255,255,0.8);
+  filter: drop-shadow(0 0 10px var(--neon-cyan));
+  transition: fill 0.2s;
+}
+
+.upload-card:hover .upload-icon svg {
+  fill: var(--neon-purple);
+}
+
+.file-hint {
+  color: var(--text-secondary);
+  margin: 0.5rem 0 1.5rem;
+  font-size: 0.95rem;
+}
+
+/* ========== GLASS BUTTON ========== */
+.glass-button {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  padding: 0.9rem 2.5rem;
+  border-radius: 60px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  border-image: linear-gradient(145deg, var(--neon-cyan), var(--neon-purple)) 1;
+  border-width: 2px;
+  border-style: solid;
+  border-color: transparent;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.1) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  transform: rotate(30deg);
+  transition: all 0.5s;
+}
+
+.glass-button:hover {
+  background: rgba(0,240,255,0.15);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 25px var(--neon-cyan);
+}
+
+.glass-button:hover::after {
+  left: 100%;
+}
+
+/* ========== PROGRESS BAR ========== */
+.progress-container {
+  margin-top: 2.5rem;
+  background: rgba(0,0,0,0.3);
+  border-radius: 60px;
+  padding: 0.25rem;
+  backdrop-filter: blur(4px);
+}
+
+.progress-bar {
+  height: 12px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 60px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+  border-radius: 60px;
+  box-shadow: 0 0 20px var(--neon-cyan);
+  transition: width 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.3),
+    transparent
+  );
+  animation: shimmer 1.8s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.progress-status {
+  text-align: center;
+  margin-top: 0.8rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ========== FOOTER ========== */
+.glass-footer {
+  margin-top: 3rem;
+  text-align: center;
+  color: rgba(200, 220, 255, 0.4);
+  font-size: 0.85rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 1.5rem;
+}
